@@ -1,4 +1,21 @@
 <resources>
     <string name="app_name">Devoxx</string>
-    <string name="hello">Hello Devoxx</string>
+
+    <string name="hello">Devoxx</string>
+    <string name="description">Welcome on our amazing app, created to help you to follow Devoxx France 2020</string>
+
+    <string name="menu_github">Github</string>
+    <string name="menu_speaker_list">Speaker list</string>
+    <string name="menu_mail">Send email</string>
+
+    <string name="title_speaker_add">Add speaker</string>
+    <string name="title_speaker_updte">Update speaker</string>
+    <string name="title_speaker_list">Speaker List</string>
+    <string name="title_speaker_view">Speaker</string>
+    
+    <string name="speaker_firstname">Firstname</string>
+    <string name="speaker_lastname">Lastname</string>
+    <string name="speaker_picture">Picture</string>
+    <string name="speaker_error_required">Firstname and a lastname are required</string>
+    <string name="speaker_country">Country</string>
 </resources>
