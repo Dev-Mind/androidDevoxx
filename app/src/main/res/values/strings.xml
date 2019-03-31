@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Devoxx</string>
+    <string name="hello">Hello Devoxx</string>
 </resources>
