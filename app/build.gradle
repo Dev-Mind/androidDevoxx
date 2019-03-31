@@ -4,6 +4,8 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -23,12 +25,46 @@ android {
 }
 
 dependencies {
+    // Dépendances permetant de construire le projet
+    // =============================================
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.0.0-beta01'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'androidx.appcompat:appcompat:1.1.0-alpha03'
     implementation 'androidx.core:core-ktx:1.1.0-alpha05'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+
+    // Nous allons faire des listes et suivre Material Design pour les styles
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'com.google.android.material:material:1.0.0'
+
+    // Data base
+    implementation 'androidx.room:room-runtime:2.1.0-alpha06'
+    annotationProcessor 'androidx.room:room-compiler:2.1.0-alpha06'
+    kapt 'androidx.room:room-compiler:2.1.0-alpha06'
+
+    // Coroutines
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.0.0'
+
+    // Life cycle and live data
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0"
+
+    // Dépendances pour les tests unitaires
+    // =============================================
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
+
+    // Dépendances pour les tests intégration
+    // =============================================
+    androidTestImplementation 'androidx.test:runner:1.1.1'
+    androidTestImplementation 'androidx.test:rules:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.1.1'
+
+    // Librairie pour des assertions plus simple
+    androidTestImplementation 'com.google.truth:truth:0.42'
+
+    // Librairie pour utiliser des mocks
+    androidTestImplementation 'io.mockk:mockk-android:1.9.2'
+
+    // Librairie pour faciliter les tests de l'asynchronisme
+    androidTestImplementation 'androidx.arch.core:core-testing:2.0.1'
 }
