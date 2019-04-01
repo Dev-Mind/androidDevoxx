@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="@string/menu_speaker_list" android:id="@+id/menuSpeakerList"
+          android:icon="@drawable/ic_view_list_white_48dp"
+          app:showAsAction="always"/>
+
+    <item android:title="@string/menu_mail" android:id="@+id/menuMail"
+          android:icon="@drawable/ic_mail_white_48dp"
+          app:showAsAction="ifRoom"/>
+
+    <item android:title="@string/menu_github" android:id="@+id/menuGithub"
+          android:icon="@drawable/ic_logo_github"
+          app:showAsAction="never"/>
+</menu>

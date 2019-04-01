@@ -1,9 +1,8 @@
 package com.devmind.devoxx
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
-class SpeakerListActivity : AppCompatActivity() {
+class SpeakerListActivity : MainActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
