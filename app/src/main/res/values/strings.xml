@@ -12,7 +12,7 @@
     <string name="title_speaker_updte">Update speaker</string>
     <string name="title_speaker_list">Speaker List</string>
     <string name="title_speaker_view">Speaker</string>
-    
+
     <string name="speaker_firstname">Firstname</string>
     <string name="speaker_lastname">Lastname</string>
     <string name="speaker_picture">Picture</string>
