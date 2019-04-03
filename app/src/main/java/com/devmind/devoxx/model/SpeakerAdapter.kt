@@ -6,8 +6,9 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.devmind.devoxx.R
+import com.devmind.devoxx.SpeakerSelectionListener
 
-class SpeakerAdapter: RecyclerView.Adapter<SpeakerAdapter.ViewHolder>(){
+class SpeakerAdapter(val listener: SpeakerSelectionListener): RecyclerView.Adapter<SpeakerAdapter.ViewHolder>(){
 
     private val speakers = mutableListOf<Speaker>()
 
@@ -33,9 +34,16 @@ class SpeakerAdapter: RecyclerView.Adapter<SpeakerAdapter.ViewHolder>(){
         holder.apply {
             name.text = "${speaker.firstname} ${speaker.lastname}"
             country.text = speaker.country
+            itemView.setOnClickListener {
+                listener.onSpeakerSelect(speaker.uuid)
+            }
         }
     }
 
+    override fun onViewRecycled(holder: ViewHolder) {
+        holder.itemView.setOnClickListener(null)
+        super.onViewRecycled(holder)
+    }
 }
 
 
