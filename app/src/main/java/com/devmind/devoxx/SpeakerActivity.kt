@@ -6,9 +6,17 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.devmind.devoxx.model.Speaker
 import kotlinx.android.synthetic.main.activity_speaker.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.*
+import kotlin.coroutines.CoroutineContext
 
-class SpeakerActivity : MainActivity() {
+class SpeakerActivity : MainActivity(), CoroutineScope {
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Default
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,32 +31,41 @@ class SpeakerActivity : MainActivity() {
         }
 
         if(!speakerUiid.isNullOrBlank()){
-            val speaker = speakerDao.readOne(speakerUiid)
-            speaker.apply {
-                speakerFirstname.setText(speaker.firstname)
-                speakerLastname.setText(speaker.lastname)
-                speakerCountry.setText(speaker.country)
+            launch {
+                val speaker = speakerDao.readOne(speakerUiid)
+                withContext(Dispatchers.Main){
+                    speaker.apply {
+                        speakerFirstname.setText(speaker.firstname)
+                        speakerLastname.setText(speaker.lastname)
+                        speakerCountry.setText(speaker.country)
+                    }
+                }
             }
+
         }
 
         buttonSpeakerSave.setOnClickListener {
             if (speakerFirstname.text.isNullOrBlank() || speakerLastname.text.isNullOrBlank()) {
                 Toast.makeText(applicationContext, R.string.speaker_error_required, Toast.LENGTH_LONG).show()
             } else {
-                if (speakerUiid.isNullOrBlank()) {
-                    speakerDao.create(Speaker(
-                        speakerFirstname.text.toString(),
-                        speakerLastname.text.toString(),
-                        speakerCountry.text.toString()))
+                launch {
+                    if (speakerUiid.isNullOrBlank()) {
+                        speakerDao.create(Speaker(
+                            speakerFirstname.text.toString(),
+                            speakerLastname.text.toString(),
+                            speakerCountry.text.toString()))
 
-                } else {
-                    speakerDao.update(Speaker(
-                        speakerFirstname.text.toString(),
-                        speakerLastname.text.toString(),
-                        speakerCountry.text.toString(),
-                        speakerUiid))
+                    } else {
+                        speakerDao.update(Speaker(
+                            speakerFirstname.text.toString(),
+                            speakerLastname.text.toString(),
+                            speakerCountry.text.toString(),
+                            speakerUiid))
+                    }
+                    withContext(Dispatchers.Main){
+                        startActivity(Intent(applicationContext, SpeakerListActivity::class.java))
+                    }
                 }
-                startActivity(Intent(applicationContext, SpeakerListActivity::class.java))
             }
         }
     }

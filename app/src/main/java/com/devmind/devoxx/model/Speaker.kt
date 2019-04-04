@@ -1,53 +1,37 @@
 package com.devmind.devoxx.model
 
+import androidx.room.*
 import java.util.*
 
-
+@Entity
 data class Speaker(
+    @ColumnInfo
     val firstname: String,
+    @ColumnInfo
     val lastname: String,
+    @ColumnInfo
     val country: String = "France",
+    @PrimaryKey
     val uuid: String = UUID.randomUUID().toString()
 )
 
-
-class SpeakerService {
-    val speakers = mutableListOf(Speaker("Guillaume", "EHRET"))
-}
-
-interface DaoCrud<T> {
+@Dao
+interface SpeakerDao {
     // Create
-    fun create(element: T)
+    @Insert
+    fun create(element: Speaker)
 
     // Read
-    fun readAll(): List<T>
-
-    fun readOne(id: String): T
+    @Query("select * from speaker")
+    fun readAll(): List<Speaker>
+    @Query("select * from speaker where uuid=:id")
+    fun readOne(id: String): Speaker
 
     // Update
-    fun update(element: T)
+    @Update
+    fun update(element: Speaker)
 
     // Delete
-    fun delete(element: T)
-}
-
-class SpeakerDao(private val speakerService: SpeakerService) : DaoCrud<Speaker> {
-
-    override fun create(element: Speaker) {
-        speakerService.speakers.add(element)
-    }
-
-    override fun readAll() = speakerService.speakers
-
-    override fun readOne(id: String): Speaker = speakerService.speakers.first { it.uuid == id }
-
-    override fun update(element: Speaker) {
-        delete(readOne(element.uuid))
-        create(element)
-    }
-
-    override fun delete(element: Speaker) {
-        speakerService.speakers.removeAll { it.uuid == element.uuid }
-    }
-
+    @Delete
+    fun delete(element: Speaker)
 }

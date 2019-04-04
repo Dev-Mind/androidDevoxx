@@ -2,16 +2,16 @@ package com.devmind.devoxx
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatActivity
-import com.devmind.devoxx.model.SpeakerDao
-import com.devmind.devoxx.model.SpeakerService
+import androidx.room.Room
+import com.devmind.devoxx.model.DevoxxDatabase
 
-class DevoxxApplication:Application(){
+class DevoxxApplication : Application() {
 
-    val speakerService by lazy{
-        SpeakerService()
+    val devoxxDatabase by lazy {
+        Room.databaseBuilder(applicationContext, DevoxxDatabase::class.java, "devoxx2").build()
     }
 
-    fun speakerDao() = SpeakerDao(speakerService)
+    fun speakerDao() = devoxxDatabase.speakerDao()
 }
 
 val AppCompatActivity.devoxxApplication
