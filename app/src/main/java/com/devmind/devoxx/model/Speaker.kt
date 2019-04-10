@@ -13,7 +13,11 @@ data class Speaker(
     val country: String = "France",
     @PrimaryKey
     val uuid: String = UUID.randomUUID().toString()
-)
+){
+    companion object {
+        fun empty() = Speaker("", "")
+    }
+}
 
 @Dao
 interface SpeakerDao {

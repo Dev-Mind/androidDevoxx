@@ -47,6 +47,7 @@ dependencies {
 
     // Life cycle and live data
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0"
+    implementation "androidx.lifecycle:lifecycle-extensions:2.0.0"
 
     // Dépendances pour les tests unitaires
     // =============================================

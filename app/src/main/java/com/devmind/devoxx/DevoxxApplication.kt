@@ -2,6 +2,7 @@ package com.devmind.devoxx
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.room.Room
 import com.devmind.devoxx.model.DevoxxDatabase
 

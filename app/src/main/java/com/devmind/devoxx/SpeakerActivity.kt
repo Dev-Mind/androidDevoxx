@@ -4,19 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.devmind.devoxx.model.Speaker
 import kotlinx.android.synthetic.main.activity_speaker.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.util.*
-import kotlin.coroutines.CoroutineContext
 
-class SpeakerActivity : MainActivity(), CoroutineScope {
-
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Default
+class SpeakerActivity : MainActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,42 +24,42 @@ class SpeakerActivity : MainActivity(), CoroutineScope {
             setAdapter(ArrayAdapter(baseContext, android.R.layout.simple_dropdown_item_1line, countries))
         }
 
-        if(!speakerUiid.isNullOrBlank()){
-            launch {
-                val speaker = speakerDao.readOne(speakerUiid)
-                withContext(Dispatchers.Main){
-                    speaker.apply {
-                        speakerFirstname.setText(speaker.firstname)
-                        speakerLastname.setText(speaker.lastname)
-                        speakerCountry.setText(speaker.country)
-                    }
-                }
-            }
+        val model = ViewModelProviders.of(this).get(SpeakerViewModel::class.java)
 
+        model.speakerLiveData.observe(this, Observer<Speaker> {
+            speakerFirstname.setText(it.firstname)
+            speakerLastname.setText(it.lastname)
+            speakerCountry.setText(it.country)
+        })
+
+        if (!speakerUiid.isNullOrBlank()) {
+            model.loadSpeaker(speakerUiid)
         }
 
         buttonSpeakerSave.setOnClickListener {
             if (speakerFirstname.text.isNullOrBlank() || speakerLastname.text.isNullOrBlank()) {
                 Toast.makeText(applicationContext, R.string.speaker_error_required, Toast.LENGTH_LONG).show()
             } else {
-                launch {
-                    if (speakerUiid.isNullOrBlank()) {
-                        speakerDao.create(Speaker(
+                if (speakerUiid.isNullOrBlank()) {
+                    model.createSpeaker(
+                        Speaker(
                             speakerFirstname.text.toString(),
                             speakerLastname.text.toString(),
-                            speakerCountry.text.toString()))
+                            speakerCountry.text.toString()
+                        )
+                    )
 
-                    } else {
-                        speakerDao.update(Speaker(
+                } else {
+                    model.updateSpeaker(
+                        Speaker(
                             speakerFirstname.text.toString(),
                             speakerLastname.text.toString(),
                             speakerCountry.text.toString(),
-                            speakerUiid))
-                    }
-                    withContext(Dispatchers.Main){
-                        startActivity(Intent(applicationContext, SpeakerListActivity::class.java))
-                    }
+                            speakerUiid
+                        )
+                    )
                 }
+                startActivity(Intent(applicationContext, SpeakerListActivity::class.java))
             }
         }
     }

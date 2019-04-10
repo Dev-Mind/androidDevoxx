@@ -2,24 +2,20 @@ package com.devmind.devoxx
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.devmind.devoxx.model.Speaker
 import com.devmind.devoxx.model.SpeakerAdapter
 import kotlinx.android.synthetic.main.activity_speaker_list.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import kotlin.coroutines.CoroutineContext
 
 interface SpeakerSelectionListener{
     fun onSpeakerSelect(id: String)
 }
 
-class SpeakerListActivity : MainActivity(), SpeakerSelectionListener, CoroutineScope {
-
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Default
+class SpeakerListActivity : MainActivity(), SpeakerSelectionListener {
 
     override fun onSpeakerSelect(id: String) {
         startActivity(Intent(applicationContext, SpeakerActivity::class.java).putExtra("ID", id))
@@ -36,12 +32,11 @@ class SpeakerListActivity : MainActivity(), SpeakerSelectionListener, CoroutineS
             adapter = SpeakerAdapter(this@SpeakerListActivity)
         }
 
-        launch {
-            val speakers = devoxxApplication.speakerDao().readAll()
-            withContext(Dispatchers.Main){
-                (speakerList.adapter as SpeakerAdapter).updateData(speakers)
-            }
-        }
+        val model = ViewModelProviders.of(this).get(SpeakerListViewModel::class.java)
+
+        model.speakersLiveData.observe(this, Observer<List<Speaker>>{
+            (speakerList.adapter as SpeakerAdapter).updateData(it)
+        })
 
         buttonAddSpeaker.setOnClickListener {
             onSpeakerSelect("")
